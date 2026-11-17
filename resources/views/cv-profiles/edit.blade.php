@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Edit Data CV</title><style>
+*{box-sizing:border-box}body{margin:0;background:#eef2f6;color:#27364a;font:15px Arial,sans-serif}.wrap{max-width:850px;margin:32px auto;padding:20px}.panel{background:white;padding:28px;border-radius:12px;box-shadow:0 4px 18px #162d4514}.field{margin:17px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:block;font-weight:bold;margin-bottom:7px}input,textarea{width:100%;padding:11px;border:1px solid #ccd5df;border-radius:6px;font:inherit}textarea{resize:vertical}.btn{display:inline-block;padding:11px 16px;border:0;border-radius:6px;background:#24486c;color:#fff;text-decoration:none;cursor:pointer}.btn.gray{background:#657386}.err{display:block;color:#b4232f;margin-top:5px}.preview{width:100px;height:100px;object-fit:cover;border-radius:50%}.muted{color:#68778a}@media(max-width:600px){.grid{grid-template-columns:1fr}.panel{padding:18px}}
+</style></head>
+<body><main class="wrap"><a href="{{ route('cv-profiles.index') }}" class="btn gray">← Kembali</a><div class="panel" style="margin-top:18px"><h1>Edit Data CV</h1><p class="muted">Isi data di bawah. Tanda * wajib diisi.</p>
+@if($errors->any())<div style="background:#fff0f0;padding:12px;border-radius:6px;color:#a22">Periksa kembali isian yang belum benar.</div>@endif
+<form method="POST" action="{{ route('cv-profiles.update', $profile) }}" enctype="multipart/form-data">@csrf @method('PUT')
+<div class="field"><label>Nama lengkap *</label><input name="name" value="{{ old('name', $profile->name ?? '') }}" required>@error('name')<small class="err">{{ $message }}</small>@enderror</div>
+<div class="field"><label>Jabatan / gelar profesional *</label><input name="professional_title" value="{{ old('professional_title', $profile->professional_title ?? '') }}" placeholder="Contoh: Mahasiswa Teknik Informatika" required>@error('professional_title')<small class="err">{{ $message }}</small>@enderror</div>
+<div class="grid"><div class="field"><label>Email</label><input type="email" name="email" value="{{ old('email', $profile->email ?? '') }}">@error('email')<small class="err">{{ $message }}</small>@enderror</div>
+<div class="field"><label>Nomor telepon</label><input name="phone" value="{{ old('phone', $profile->phone ?? '') }}"></div></div>
+<div class="field"><label>Alamat</label><input name="address" value="{{ old('address', $profile->address ?? '') }}"></div>
+<div class="field"><label>Tentang saya</label><textarea name="about" rows="3">{{ old('about', $profile->about ?? '') }}</textarea></div>
+<div class="field"><label>Pendidikan</label><textarea name="education" rows="4" placeholder="Satu pendidikan per baris. Contoh: 2024–sekarang | Teknik Informatika | Politeknik ...">{{ old('education', $profile->education ?? '') }}</textarea></div>
+<div class="field"><label>Pengalaman kerja / organisasi</label><textarea name="experience" rows="5" placeholder="Tuliskan pengalaman, jabatan, periode, dan deskripsi. Pisahkan tiap pengalaman dengan baris kosong.">{{ old('experience', $profile->experience ?? '') }}</textarea></div>
+<div class="field"><label>Keahlian</label><textarea name="skills" rows="3" placeholder="Pisahkan tiap keahlian dengan baris baru.">{{ old('skills', $profile->skills ?? '') }}</textarea></div>
+<div class="field"><label>Referensi (opsional)</label><textarea name="reference" rows="2">{{ old('reference', $profile->reference ?? '') }}</textarea></div>
+<div class="field"><label>Foto profil (JPG, PNG, WEBP; maks. 2 MB)</label><input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp">@error('photo')<small class="err">{{ $message }}</small>@enderror
+@if(isset($profile) && $profile->photo)<p><img class="preview" src="{{ asset('storage/'.$profile->photo) }}" alt="Foto saat ini"></p>@endif</div>
+<button class="btn" type="submit">Simpan CV</button> <a class="btn gray" href="{{ route('cv-profiles.index') }}">Batal</a>
+</form></div></main></body></html>

@@ -1,0 +1,5 @@
+// Tambahkan baris ini di routes/web.php, di dalam file yang sudah ada.
+// Jangan menghapus route project yang sebelumnya.
+use App\Http\Controllers\CvProfileController;
+
+Route::resource('cv-profiles', CvProfileController::class);

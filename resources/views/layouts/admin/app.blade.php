@@ -42,7 +42,7 @@
 
 <body>
     <!-- start sidebar -->
-   @include('layouts.admin.css')
+   @include('layouts.admin.sidebar')
     <!-- end sidebar -->
 
     <main class="content">

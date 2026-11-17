@@ -31,18 +31,18 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-        ]);
+        'name' => 'required|string|max:100',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:8|confirmed',
+    ]);
 
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['password'] = Hash::make($request->password);
+    $data['name'] = $request->name;
+    $data['email'] = $request->email;
+    $data['password'] = Hash::make($request->password);
 
-        User::create($data);
+    User::create($data);
 
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
+    return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
     }
 
     /**
@@ -67,26 +67,28 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::findOrFail($id);
+         $user = User::findOrFail($id);
 
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'email' => 'required|email|unique:users,email,' . $id,
+    ]);
+
+    $user->name = $request->name;
+    $user->email = $request->email;
+
+    if ($request->filled('password')) {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'required|min:8|confirmed',
         ]);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+    }
 
-        if ($request->filled('password')) {
-            $request->validate([
-                'password' => 'required|min:6|confirmed',
-            ]);
-            $user->password = Hash::make($request->password);
-        }
+    $user->save();
 
-        $user->save();
-
-        return redirect()->route('user.index')->with('success', 'Perubahan Data User Berhasil!');
+    return redirect()->route('user.index')
+        ->with('success', 'Perubahan Data User Berhasil!');
     }
 
     /**
